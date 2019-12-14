@@ -7,10 +7,11 @@ const Button = props => (
 
 const Statistics = ({ text, value, percent }) => {
   return (
-    <div>
-      {" "}
-      {text} {value} {percent}
-    </div>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+      <td>{percent}</td>
+    </tr>
   );
 };
 
@@ -39,12 +40,16 @@ const App = () => {
       <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
       <Button handleClick={() => setBad(bad + 1)} text="bad" />
       <h1>statistics</h1>
-      <Statistics text="good" value={good} />
-      <Statistics text="neutral" value={neutral} />
-      <Statistics text="bad" value={bad} />
-      <Statistics text="all" value={good + neutral + bad} />
-      <Statistics text="average" value={(good - bad) / all} />
-      <Statistics text="positive" value={good / all} percent="%" />
+      <table>
+        <tbody>
+          <Statistics text="good" value={good} />
+          <Statistics text="neutral" value={neutral} />
+          <Statistics text="bad" value={bad} />
+          <Statistics text="all" value={good + neutral + bad} />
+          <Statistics text="average" value={(good - bad) / all} />
+          <Statistics text="positive" value={good / all} percent="%" />
+        </tbody>
+      </table>
     </div>
   );
 };
