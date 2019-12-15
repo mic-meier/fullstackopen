@@ -10,18 +10,27 @@ const anecdotes = [
   "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."
 ];
 
-const App = props => {
+const App = () => {
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
 
-  const handleClick = () => {
+  const handleNext = () => {
     let index = Math.floor(Math.random() * Math.floor(anecdotes.length));
     setSelected(index);
   };
 
+  const handleVote = selected => {
+    const votesCopy = [...votes];
+    votesCopy[selected] += 1;
+    setVotes(votesCopy);
+  };
+
   return (
     <div>
-      <div>{props.anecdotes[selected]}</div>
-      <button onClick={() => handleClick()}>next anecdote</button>
+      <div>{anecdotes[selected]}</div>
+      <div>has {votes[selected]} votes</div>
+      <button onClick={() => handleVote(selected)}>vote</button>
+      <button onClick={() => handleNext()}>next anecdote</button>
     </div>
   );
 };
