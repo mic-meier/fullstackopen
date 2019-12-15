@@ -4,15 +4,20 @@ import ReactDOM from "react-dom";
 const Course = ({ course }) => {
   const lectures = () =>
     course.parts.map(part => (
-      <div key={part.id}>
+      <p key={part.id}>
         {part.name} {part.exercises}
-      </div>
+      </p>
     ));
+
+  const sumOfExercises = course.parts
+    .map(part => part.exercises)
+    .reduce((sum, exercise) => sum + exercise);
 
   return (
     <div>
       <h1>{course.name}</h1>
       {lectures()}
+      <h4>total of {sumOfExercises} exercises</h4>
     </div>
   );
 };
