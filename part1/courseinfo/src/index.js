@@ -2,14 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 const Course = ({ course }) => {
+  const parts = course.parts;
+
   const lectures = () =>
-    course.parts.map(part => (
+    parts.map(part => (
       <p key={part.id}>
         {part.name} {part.exercises}
       </p>
     ));
 
-  const sumOfExercises = course.parts
+  const sumOfExercises = parts
     .map(part => part.exercises)
     .reduce((sum, exercise) => sum + exercise);
 
