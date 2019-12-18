@@ -11,16 +11,16 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const contacts = () => {
-    const displayContacts = persons.filter(person =>
-      person.name.toUpperCase().includes(searchTerm.toUpperCase())
-    );
-    return displayContacts.map(person => (
-      <div key={person.name}>
-        {person.name} {person.number}
-      </div>
-    ));
-  };
+  const contacts = () =>
+    persons
+      .filter(person =>
+        person.name.toUpperCase().includes(searchTerm.toUpperCase())
+      )
+      .map(person => (
+        <div key={person.name}>
+          {person.name} {person.number}
+        </div>
+      ));
 
   const addContact = event => {
     event.preventDefault();
