@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Contacts from "./Contacts";
 import ContactForm from "./ContactForm";
 import Filter from "./Filter";
+import Notification from './Notification'
 import contactService from "../services/contacts";
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState(null);
 
   useEffect(() => {
     contactService
@@ -29,6 +31,13 @@ const App = () => {
           .then(returnedContact => {
             setPersons(persons.map(person => person.id !== id ? person : returnedContact))
           })
+
+          setNotificationMessage(
+            `User ${newName} updated.`
+          )
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 2000)
       }
     } else {
       const newContact = { name: newName, number: newNumber };
@@ -38,6 +47,13 @@ const App = () => {
         .then(returnedContact => setPersons(persons.concat(returnedContact)));
       setNewName("");
       setNewNumber("");
+
+      setNotificationMessage(
+        `User ${newName} added.`
+      )
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 2000)
     }
   };
 
@@ -63,6 +79,7 @@ const App = () => {
   return (
     <div>
       <h2>Phone Book</h2>
+      <Notification message={notificationMessage} />
       <Filter searchTerm={searchTerm} handleSearch={handleSearch} />
       <h2>Add a new contact</h2>
       <ContactForm
