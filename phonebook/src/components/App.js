@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Contacts from "./Contacts";
 import ContactForm from "./ContactForm";
 import Filter from "./Filter";
+import contactService from "../services/contacts";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,10 +11,10 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(res => setPersons(res.data));
-  });
+    contactService
+      .getContacts()
+      .then(initialContacts => setPersons(initialContacts));
+  }, []);
 
   const addContact = event => {
     event.preventDefault();
@@ -22,7 +22,11 @@ const App = () => {
     if (persons.map(person => person.name).includes(newName)) {
       alert(`${newName} is already added to the phone book`);
     } else {
-      setPersons(persons.concat({ name: newName, number: newNumber }));
+      const newContact = { name: newName, number: newNumber };
+
+      contactService
+        .createContact(newContact)
+        .then(returnedContact => setPersons(persons.concat(returnedContact)));
       setNewName("");
       setNewNumber("");
     }
