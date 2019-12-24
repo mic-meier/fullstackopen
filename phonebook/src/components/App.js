@@ -20,7 +20,16 @@ const App = () => {
     event.preventDefault();
 
     if (persons.map(person => person.name).includes(newName)) {
-      alert(`${newName} is already added to the phone book`);
+      if (window.confirm(`${newName} is already added to the phone book. Replace the phone number?`)) {
+        const updateContact = {name: newName, number: newNumber}
+        const id = persons.filter(person => person.name.includes(newName))[0].id
+
+        contactService
+          .updateContact(id, updateContact)
+          .then(returnedContact => {
+            setPersons(persons.map(person => person.id !== id ? person : returnedContact))
+          })
+      }
     } else {
       const newContact = { name: newName, number: newNumber };
 
