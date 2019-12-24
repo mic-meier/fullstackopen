@@ -38,7 +38,6 @@ const App = () => {
   };
 
   const handleClick = (e, country) => {
-    console.log("country", country);
     setDetailedCountry(country);
   };
 

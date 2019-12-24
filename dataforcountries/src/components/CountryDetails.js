@@ -11,7 +11,6 @@ const countryDetails = ({ country, weather }) => {
     currentWeather = weather.current;
   }
 
-  console.log("currentWeather", currentWeather);
 
   const languages = country.languages.map(language => (
     <li key={language.name}>{language.name}</li>
