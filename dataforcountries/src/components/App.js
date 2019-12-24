@@ -7,6 +7,7 @@ const App = () => {
   const [countries, setCountries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [detailedCountry, setDetailedCountry] = useState(null);
+  const [weather, setWeather] = useState(null);
 
   useEffect(() => {
     axios
@@ -14,10 +15,20 @@ const App = () => {
       .then(res => setCountries(res.data));
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${
+          process.env.REACT_APP_API_KEY
+        }&query=${detailedCountry ? detailedCountry.capital : null}`
+      )
+      .then(res => setWeather(res.data));
+  }, [detailedCountry]);
+
   const handleSearch = e => {
     const filtered = countries.filter(country =>
       country.name.toUpperCase().includes(e.target.value.toLocaleUpperCase())
-    )
+    );
     if (filtered.length === 1) {
       setDetailedCountry(filtered[0]);
     } else {
@@ -28,7 +39,7 @@ const App = () => {
 
   const handleClick = (e, country) => {
     console.log("country", country);
-    setDetailedCountry(country)
+    setDetailedCountry(country);
   };
 
   const filteredCountries = countries.filter(country =>
@@ -39,7 +50,7 @@ const App = () => {
     <div>
       Search countries: <input value={searchTerm} onChange={handleSearch} />
       <div>
-        <CountryDetails country={detailedCountry} />
+        <CountryDetails country={detailedCountry} weather={weather} />
         <DisplayCountries
           filteredCountries={filteredCountries}
           handleClick={handleClick}
