@@ -19,26 +19,28 @@ const App = () => {
     country.name.toUpperCase().includes(searchTerm.toLocaleUpperCase())
   );
 
+  const countryDetails = () => {
+    const country = filteredCountries[0];
+
+    const languages = country.languages.map(language => (
+      <li key={language.name}>{language.name}</li>
+    ));
+
+    return (
+      <div>
+        <h1>{country.name}</h1>
+        <div>Capital: {country.capital}</div>
+        <div>Population: {country.population}</div>
+        <h2>Languages</h2>
+        <ul>{languages}</ul>
+        <img src={country.flag} alt={`Flag of ${country.name}`} width="300" />
+      </div>
+    );
+  };
+
   const displayCountries = () => {
     if (filteredCountries.length === 1) {
-      console.log("filteredCountries", filteredCountries);
-      const languages = filteredCountries[0].languages.map(language => (
-        <li key={language.name}>{language.name}</li>
-      ));
-      console.log("languages", languages);
-
-      return filteredCountries.map(country => (
-        <div key={country.alpha3Code}>
-          <h1>{country.name}</h1>
-          <div>Capital: {country.capital}</div>
-          <div>Population: {country.population}</div>
-          <h2>Languages</h2>
-          <ul>
-          {languages}
-          </ul>
-          <img src={country.flag} alt={`flag of ${country.name}`} width="300" />
-        </div>
-      ));
+      return countryDetails();
     } else if (filteredCountries.length <= 10) {
       return filteredCountries.map(country => (
         <div key={country.alpha3Code}>{country.name}</div>
