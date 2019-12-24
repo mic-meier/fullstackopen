@@ -1,6 +1,10 @@
 import React from "react";
 
 const countryDetails = ({ country }) => {
+  if (!country) {
+    return null
+  }
+
   const languages = country.languages.map(language => (
     <li key={language.name}>{language.name}</li>
   ));
