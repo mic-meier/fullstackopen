@@ -44,6 +44,13 @@ const App = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleDelete = (id, contactName) => {
+    if (window.confirm(contactName)) {
+      contactService.deleteContact(id).then(res => console.log("res", res));
+      setPersons(persons.filter(person => person.id !== id));
+    }
+  };
+
   return (
     <div>
       <h2>Phone Book</h2>
@@ -57,7 +64,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Contacts persons={persons} searchTerm={searchTerm} />
+      <Contacts
+        persons={persons}
+        searchTerm={searchTerm}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
