@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Contacts from "./Contacts";
 import ContactForm from "./ContactForm";
 import Filter from "./Filter";
-import Notification from './Notification'
+import ErrorNotification from "./ErrorNotification";
+import Notification from "./Notification";
 import contactService from "../services/contacts";
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [notificationMessage, setNotificationMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     contactService
@@ -22,22 +24,37 @@ const App = () => {
     event.preventDefault();
 
     if (persons.map(person => person.name).includes(newName)) {
-      if (window.confirm(`${newName} is already added to the phone book. Replace the phone number?`)) {
-        const updateContact = {name: newName, number: newNumber}
-        const id = persons.filter(person => person.name.includes(newName))[0].id
+      if (
+        window.confirm(
+          `${newName} is already added to the phone book. Replace the phone number?`
+        )
+      ) {
+        const updateContact = { name: newName, number: newNumber };
+        const id = persons.filter(person => person.name.includes(newName))[0]
+          .id;
 
         contactService
           .updateContact(id, updateContact)
           .then(returnedContact => {
-            setPersons(persons.map(person => person.id !== id ? person : returnedContact))
+            setPersons(
+              persons.map(person =>
+                person.id !== id ? person : returnedContact
+              )
+            );
+            setNotificationMessage(`User ${newName} updated.`);
           })
+          .catch(() => {
+            setErrorMessage(
+              `Contact ${newName} was already deleted on the server.`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 2000);
+          });
 
-          setNotificationMessage(
-            `User ${newName} updated.`
-          )
-          setTimeout(() => {
-            setNotificationMessage(null)
-          }, 2000)
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 2000);
       }
     } else {
       const newContact = { name: newName, number: newNumber };
@@ -48,12 +65,10 @@ const App = () => {
       setNewName("");
       setNewNumber("");
 
-      setNotificationMessage(
-        `User ${newName} added.`
-      )
+      setNotificationMessage(`User ${newName} added.`);
       setTimeout(() => {
-        setNotificationMessage(null)
-      }, 2000)
+        setNotificationMessage(null);
+      }, 2000);
     }
   };
 
@@ -70,8 +85,8 @@ const App = () => {
   };
 
   const handleDelete = (id, contactName) => {
-    if (window.confirm(contactName)) {
-      contactService.deleteContact(id).then(res => console.log("res", res));
+    if (window.confirm(`Delete ${contactName} from contacts?`)) {
+      contactService.deleteContact(id);
       setPersons(persons.filter(person => person.id !== id));
     }
   };
@@ -80,6 +95,7 @@ const App = () => {
     <div>
       <h2>Phone Book</h2>
       <Notification message={notificationMessage} />
+      <ErrorNotification errorMessage={errorMessage} />
       <Filter searchTerm={searchTerm} handleSearch={handleSearch} />
       <h2>Add a new contact</h2>
       <ContactForm
