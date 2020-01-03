@@ -42,6 +42,8 @@ const App = () => {
               )
             );
             setNotificationMessage(`User ${newName} updated.`);
+            setNewName("");
+            setNewNumber("");
           })
           .catch(() => {
             setErrorMessage(

@@ -1,3 +1,7 @@
+notes/build/
+phonebook/.vscode/
+phonebook/build/
+
 # Logs
 logs
 *.log
