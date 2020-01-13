@@ -63,14 +63,23 @@ const App = () => {
 
       contactService
         .createContact(newContact)
-        .then(returnedContact => setPersons(persons.concat(returnedContact)));
-      setNewName("");
-      setNewNumber("");
+        .then(returnedContact => setPersons(persons.concat(returnedContact)))
+        .then(() => {
+          setNewName("");
+          setNewNumber("");
 
-      setNotificationMessage(`User ${newName} added.`);
-      setTimeout(() => {
-        setNotificationMessage(null);
-      }, 2000);
+          setNotificationMessage(`User ${newName} added.`);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 2000);
+        })
+        .catch(error => {
+          console.log("error.response.data", error.response.data);
+          setErrorMessage(error.response.data.error);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 2000);
+        });
     }
   };
 
